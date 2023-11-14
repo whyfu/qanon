@@ -33,8 +33,8 @@ class GenILoss:
                         lo = int(str(record[qi]).split('-')[0])
                         sum += ((hi - lo) / self.UniqueVals[self.OrigDF.columns[qi]])
 
-            if sum - temp_sum > 0.5:
-                print(self.OrigDF.columns[qi], ":", record[qi])
+            # if sum - temp_sum > 0.5:
+                # print(self.OrigDF.columns[qi], ":", record[qi])
 
         genILoss =   (1 / (len(df) * len(self.feature_columns))) * sum
         # print("Max sum:", (len(df) * len(self.feature_columns)))
