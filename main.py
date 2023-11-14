@@ -3,8 +3,6 @@
 k = 45           # K-anonymity
 l = 2           # L-closeness
 t = 0           # T-diversity
-epsilon = 0.5   # Epsilon for Differential Privacy
-delta = 0.001   # Delta for Differential Privacy
 
 
 # Just to color the outputs
@@ -47,7 +45,7 @@ import pandas as pd
 
 
 # Load the dataset into memory
-dataset_path = "patients.csv" #input("Input Dataset Path: ") 
+dataset_path = "adult.sample.csv" #input("Input Dataset Path: ") 
 df = pd.read_csv(dataset_path, sep=",", engine="python");
 
 print(" Total number of rows in dataset: ", len(df))
@@ -97,9 +95,6 @@ for col in df.columns:
 # Making a copy of the dataset for the DP stats calculation
 OrigDF = df.copy()
 
-
-
-# Some datastructures for computational easiness
 qi_index = list()
 feature_columns = list()
 sensitive_column = list()
@@ -200,7 +195,7 @@ anon_cavg = CAVG(anonymizedDF, qi_index, k)
 anon_cavg_score = anon_cavg.compute_score()
 
 import math
-print(f"CAVG score (near 1 is better): \n  BEFORE: {raw_cavg_score:.3f} || AFTER: {anon_cavg_score:.3f} || {math.fabs(1-raw_cavg_score) > math.fabs(1-anon_cavg_score)}")
+print(f"CAVG score (near 1 is better): \n  BEFORE: {raw_cavg_score:.3f} || AFTER: {anon_cavg_score:.3f}")
 
 # Gen I Loss Metric
 GILoss = GenILoss(OrigDF, feature_columns)
@@ -238,7 +233,7 @@ def paint_bg(v, color):
     ret = [f"background-color: {color[0]};" for i in v]
     return ret
 
-anonymizedDF = anonymizedDF.style.hide_index().apply(paint_bg, color=['gainsboro', 'ivory'], axis=1) 
+anonymizedDF = anonymizedDF.style.hide(axis="index").apply(paint_bg, color=['gainsboro', 'ivory'], axis=1) 
 
 
 # Write a dataframe to the worksheet.
@@ -248,5 +243,4 @@ anonymizedDF.to_excel(writer, sheet_name ='Data', index=False)
 # print(DP_out)
 
 # Close the Pandas Excel writer object and output the Excel file.
-writer.save()
-
+writer.close()
